@@ -37,13 +37,11 @@
 			},
 			
 			filter: function(text, outCallback, inCallback) {
-				console.debug("Filtering " + text);
 				var parts = text.split(' ');
 				
 				for(var i = 0; i < sections.length; i++) {
 					for(var j = 0; j < sections[i].links.length; j++) {
 						if(matchesParts(sections[i].links[j].title, parts)) {
-							console.debug("OK - '" + text + "' matches '" + sections[i].links[j].title + "'");
 							inCallback.call(this, this.convertLinkTitleToId(sections[i].links[j].title));
 						} else {
 							outCallback.call(this, this.convertLinkTitleToId(sections[i].links[j].title));
@@ -96,8 +94,7 @@
 		location.href = 'http://www.google.com/#q=' + text.substring(2);
 	});
 	
-	actions.add("", function(text) { 
-		console.debug("here");
+	actions.add("", function(text) {
 		var links = $("#content").find('li').filter(function() { return $(this).css("display") !== "none" }).find('a');
 		if(links.length == 1) {
 			location.href = links.attr('href');
@@ -114,7 +111,6 @@
 			if(event.which == 13) {
 				actions.search(value);
 			} else {
-				//filter
 				arrayFilter.filter(value, filterOut, filterIn);
 			}
 		});
