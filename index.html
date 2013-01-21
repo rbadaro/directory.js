@@ -1,158 +1,37 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+
 <meta charset=utf-8 />
 <title>Directory</title>
+<script src="http://code.jquery.com/jquery.min.js"></script>
+<script src="http://documentcloud.github.com/underscore/underscore-min.js"></script>
+<link href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css" rel="stylesheet" type="text/css" />
+<link href="http://twitter.github.com/bootstrap/assets/css/bootstrap-responsive.css" rel="stylesheet" type="text/css" />
+<link href="style.css" rel="stylesheet" type="text/css" />
 
-<style type="text/css" media="screen">
-	
-</style>
-<script type="text/javascript" charset="utf-8">
-	
-	
-	var arrayFilter = (function() {
-		var sections = [
-			{title: 'Section 1', links: [
-				{title: 'Title 1', url: 'http://www.google.com'},
-				{title: 'Title 2', url: ''}
-			]},
-			{title: 'Section 2', links: [
-				{title: 'Title 3', url: ''}
-			]}
-		];
-		
-		function matchesParts(title, parts) {
-			for(var i=0; i < parts.length; i++) {
-				if(title.toLowerCase().indexOf(parts[i].toLowerCase()) < 0) {
-					return false;
-				}
-			}
-			return true;
-		}
-		
-		return {
-			convertLinkTitleToId: function(title) {
-				return title.toLowerCase().replace(/ /g, '_');
-			},
-			
-			filter: function(text, outCallback, inCallback) {
-				var parts = text.split(' ');
-				
-				for(var i = 0; i < sections.length; i++) {
-					for(var j = 0; j < sections[i].links.length; j++) {
-						if(matchesParts(sections[i].links[j].title, parts)) {
-							inCallback.call(this, this.convertLinkTitleToId(sections[i].links[j].title));
-						} else {
-							outCallback.call(this, this.convertLinkTitleToId(sections[i].links[j].title));
-						}
-					}
-				}
-			},
-			
-			display: function(sectionCallback) {
-				for(var i=0; i < sections.length; i++) {
-					sectionCallback.call(this, sections[i]);
-				}
-			}
-		};
-	})();
-	
-	function Searcher(prefix, action) {
-		this.prefix = prefix;
-		this.action = action;
-	}
-	
-	Searcher.prototype.search = function(text) {
-		if(text.indexOf(this.prefix) === 0) {
-			this.action.call(this, text);
-			return true;
-		} else {
-			return false;
-		}
-	}
-	
-	var actions = (function() {
-		list = [];
-		
-		return {
-			add: function(prefix, action) {
-				list.push(new Searcher(prefix, action));
-			},
-			
-			search: function(text) {
-				for(var i=0; i < list.length; i++) {
-					if(list[i].search(text)) {
-						break;
-					}
-				}				
-			}
-		};
-	})();
+<script src="http://twitter.github.com/bootstrap/assets/js/bootstrap.js"></script>
+<script src="directory.js"></script>
 
-	actions.add("g ", function(text) { 
-		location.href = 'http://www.google.com/#q=' + text.substring(2);
-	});
-	
-	actions.add("", function(text) {
-		var links = $("#content").find('li').filter(function() { return $(this).css("display") !== "none" }).find('a');
-		if(links.length == 1) {
-			location.href = links.attr('href');
-		}  
-	});
-	
-	$(function() {
-		var $search = $('#search');
-			
-		$search.focus();
-		$search.keyup(function(event) {
-			var value = $(this).val();
-			
-			if(event.which == 13) {
-				actions.search(value);
-			} else {
-				arrayFilter.filter(value, filterOut, filterIn);
-			}
-		});
-		
-		arrayFilter.display(addSection);
-		
-		
-		function filterIn(id) {
-			var $elem = $("#" + id).closest('li');
-			console.debug($elem);
-			if($elem.siblings().filter(function() { return $(this).css("display") !== "none" }).length === 0) {
-				$elem.closest('.section').show();
-			}
-			$elem.show();
-		}
-		
-		function filterOut(id) {
-			var $elem = $("#" + id).closest('li');
-			$elem.hide();
-			if($elem.siblings().filter(function() { return $(this).css("display") !== "none" }).length === 0) {
-				$elem.closest('.section').hide();
-			}
-		}
-		
-		function addSection(section) {
-			console.debug(section);
-			var sectionElem = $('<div class="section"></div>'),
-				  ul = $('<ul></ul>');
-			sectionElem.append('<p>' + section.title + '</p>');
-			for(var i = 0; i < section.links.length; i++) {
-				ul.append('<li><a id="' + arrayFilter.convertLinkTitleToId(section.links[i].title) + '" href="' + section.links[i].url + '">' + section.links[i].title + '</a></li>');
-			}
-			sectionElem.append(ul);
-			$('#content').append(sectionElem);
-		}
-	});
-	
-</script>
 </head>
 <body>
-	<div id="search_bar">
-		<input type="text" name="search" value="" id="search">
+	<div class="row-fluid">
+		<div id="search_bar" class="span12 navbar">
+			<div class="navbar-inner">
+				<form class="form-search" id="search_form">
+					<input type="text" name="search" value="" id="search" class="search-query input-xxlarge" placeholder="Type search…">
+				</form>
+			</div>
+		</div>
+		<div class="span4" id="col0">
+			
+		</div>
+		<div class="span4" id="col1">
+			
+		</div>
+		<div class="span4" id="col2">
+			
+		</div>
 	</div>
   <div id="content">
   	

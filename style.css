@@ -1,0 +1,31 @@
+#search_bar {
+	text-align: center;
+}
+
+#search_bar .navbar-inner {
+	padding-top: 10px;
+}
+
+.highlight {
+	background-color: yellow;
+}
+
+.section {
+	border: 1px solid #ddd;
+	padding-left:	19px;
+	padding-right: 19px;
+	padding-bottom: 19px;
+}
+
+.section a {
+	text-decoration: none;
+}
+
+.section li {
+	list-style: none;
+}
+
+.section a:hover, .section a:active {
+	background-color: #0088cc;
+	color: #fff;
+}
