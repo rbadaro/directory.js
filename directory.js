@@ -8,7 +8,7 @@ String.prototype.matchesParts = function(parts) {
 };
 
 String.prototype.to_id = function() {
-	return this.toLowerCase().replace(/ /g, '_');
+	return this.toLowerCase().replace(/\W/g, '_');
 }
 
 var arrayFilter = (function() {
