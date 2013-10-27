@@ -72,7 +72,7 @@ var actions = (function() {
 	return {
 		search: function(text) {
 			for(var i=0; i<list.length; i++) {
-				if(earch(list[i], text))
+				if(search(list[i], text))
 					break;
 			}
 		}
