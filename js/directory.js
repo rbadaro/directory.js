@@ -13,23 +13,24 @@ String.prototype.to_id = function() {
 
 var arrayFilter = (function() {
 	var sections = [
-		{title: 'Section 1', links: [
+		{title: 'Desenvolvimento', links: [
 			{title: 'title1', url: 'http://www.google.com'},
-			{title: 'title2', url: 'http://www.sapo.pt'}
+			{title: 'title2', url: 'http://www.sapo.pt'},
+			{title: 'title3', url: 'http://des/title3'}
 		]},
-		{title: 'Section 2', links: [
-			{title: 'title3', url: 'http://www.reddit.com'}
+		{title: 'Qualidade', links: [
+			{title: 'title3', url: 'http://qual/title3'}
 		]}
 	];
 	
 	return {		
 		filter: function(text, outCallback, inCallback) {
 			var parts = text.split(' '),
-					$this = this;
+						$this = this;
 			
 			_.each(sections, function(section) {
 				_.each(section.links, function(link) {
-					if(link.title.matchesParts(parts)) {
+					if(text != '' && link.title.matchesParts(parts)) {
 						inCallback.call($this, link.title.to_id());
 					} else {
 						outCallback.call($this, link.title.to_id());
@@ -100,23 +101,30 @@ $(function() {
 
 			if(event.which !== 13) {
 				arrayFilter.filter(value, filterOut, filterIn);
+				//console.log($('#col1').value);
 			}
 		});
 		
-		function filterIn(id) {
-			var $elem = $("#" + id).closest('li');
-			if($elem.siblings().filter(function() { return $(this).css("display") !== "none" }).length === 0) {
-				$elem.closest('.section').show();
-			}
-			$elem.show();
+		function filterIn(pname) {
+			$( "a[name^='"+pname+"']" ).each( function () {
+				//console.log($(this).attr('href'));
+				var $elem = $(this).closest('li');	
+				if($elem.siblings().filter(function() { return $(this).css("display") !== "none" }).length === 0) {
+					$elem.closest('.section').show();
+				}
+				$elem.show();
+			});
 		}
 
-		function filterOut(id) {
-			var $elem = $("#" + id).closest('li');
-			$elem.hide();
-			if($elem.siblings().filter(function() { return $(this).css("display") !== "none" }).length === 0) {
-				$elem.closest('.section').hide();
-			}
+		function filterOut(pname) {
+			$( "a[name^='"+pname+"']" ).each( function () {
+				//console.log($(this).attr('href'));
+				var $elem = $(this).closest('li');	
+				$elem.hide();
+				if($elem.siblings().filter(function() { return $(this).css("display") !== "none" }).length === 0) {
+					$elem.closest('.section').hide();
+				}
+			});
 		}
 	}
 	
@@ -131,11 +139,13 @@ $(function() {
 			sectionElem.append('<h3>' + section.title + '</h3>');
 			
 			_.each(section.links, function(link) {
-				ul.append('<li><a id="' + link.title.to_id() + '" href="' + link.url + '">' + link.title + '</a></li>');
+				ul.append('<li><a name="' + link.title.to_id() + '" href="' + link.url + '">' + link.title + '</a></li>');
 			});
 			
 			sectionElem.append(ul);
 			$('#col' + (i % 3)).append(sectionElem);
+
+			sectionElem.hide();
 		});
 	}
 });
